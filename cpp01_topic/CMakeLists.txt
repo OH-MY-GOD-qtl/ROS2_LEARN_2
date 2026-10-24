@@ -11,17 +11,26 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 
 add_executable(demo01_talker_str src/demo01_talker_str.cpp)
-target_include_directories(demo01_talker_str PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>)
+add_executable(demo02_listener_str src/demo02_listener_str.cpp)
+
 target_link_libraries(demo01_talker_str PUBLIC
   rclcpp::rclcpp
   ${std_msgs_TARGETS}
 )
-target_compile_features(demo01_talker_str PUBLIC cxx_std_17)
 
-install(TARGETS demo01_talker_str
-  DESTINATION lib/${PROJECT_NAME})
+target_link_libraries(demo02_listener_str PUBLIC
+  rclcpp::rclcpp
+  ${std_msgs_TARGETS}
+)
+
+target_compile_features(demo01_talker_str PUBLIC cxx_std_17)
+target_compile_features(demo02_listener_str PUBLIC cxx_std_17)
+
+install(TARGETS
+  demo01_talker_str
+  demo02_listener_str
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
