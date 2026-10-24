@@ -10,11 +10,11 @@ public:
     MinimalSubscriber() : Node("minimal_subscriber")
     {
         subscription_ = this->create_subscription<Student>(
-            "topic_stu", 10, std::bind(&MinimalSubscriber::timer_callback, this, _1));
+            "topic_stu", 10, std::bind(&MinimalSubscriber::topic_callback, this, _1));
     }
 
 private:
-    void timer_callback(const Student & msg) const
+    void topic_callback(const Student & msg) const
     {
         RCLCPP_INFO(this->get_logger(), "subscription message: name=%s, age=%d, height=%.2f", msg.name.c_str(), msg.age, msg.height);
     }
