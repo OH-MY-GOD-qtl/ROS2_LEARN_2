@@ -8,6 +8,8 @@ CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
 compile_commands.json
+# VS Code CMake Tools 专用构建目录（与 colcon 的 build/ 隔离）
+build-vscode/
 
 # ---- Python ----
 __pycache__/

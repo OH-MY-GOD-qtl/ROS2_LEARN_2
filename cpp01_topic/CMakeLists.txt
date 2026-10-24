@@ -9,6 +9,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(base_interfaces_demo REQUIRED)
 
 add_executable(demo01_talker_str src/demo01_talker_str.cpp)
 add_executable(demo02_listener_str src/demo02_listener_str.cpp)
@@ -16,11 +17,13 @@ add_executable(demo02_listener_str src/demo02_listener_str.cpp)
 target_link_libraries(demo01_talker_str PUBLIC
   rclcpp::rclcpp
   ${std_msgs_TARGETS}
+  ${base_interfaces_demo_TARGETS}
 )
 
 target_link_libraries(demo02_listener_str PUBLIC
   rclcpp::rclcpp
   ${std_msgs_TARGETS}
+  ${base_interfaces_demo_TARGETS}
 )
 
 target_compile_features(demo01_talker_str PUBLIC cxx_std_17)

@@ -1,4 +1,8 @@
 {
     "cmake.sourceDirectory": "/home/qtl/ROS2_LEARN_2/cpp01_topic",
-    "cmake.cmakePath": "/usr/bin/cmake"
+    "cmake.cmakePath": "/usr/bin/cmake",
+    "cmake.buildDirectory": "${workspaceFolder}/build-vscode",
+    "cmake.configureSettings": {
+        "CMAKE_PREFIX_PATH": "/opt/ros/lyrical;/home/qtl/ROS2_LEARN_2/install/base_interfaces_demo"
+    }
 }
