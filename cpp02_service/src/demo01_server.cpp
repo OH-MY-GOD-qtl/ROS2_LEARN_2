@@ -1,5 +1,5 @@
-#include <rclcpp/rclcpp.hpp>
 #include <base_interfaces_demo/srv/add_ints.hpp>
+#include <rclcpp/rclcpp.hpp>
 
 using base_interfaces_demo::srv::AddInts;
 using std::placeholders::_1;
@@ -13,6 +13,7 @@ public:
         server = this->create_service<AddInts>("add_ints", std::bind(&MinimalService::add, this, _1, _2));
         RCLCPP_INFO(this->get_logger(), "Service 'add_ints' is ready.");
     }
+
 private:
     rclcpp::Service<AddInts>::SharedPtr server;
     void add(const AddInts::Request::SharedPtr req, AddInts::Response::SharedPtr res)

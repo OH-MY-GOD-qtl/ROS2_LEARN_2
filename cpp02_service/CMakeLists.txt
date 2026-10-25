@@ -11,16 +11,22 @@ find_package(rclcpp REQUIRED)
 find_package(base_interfaces_demo REQUIRED)
 
 add_executable(demo01_server src/demo01_server.cpp)
+add_executable(demo02_client src/demo02_client.cpp)
 
 target_link_libraries(demo01_server PUBLIC
   rclcpp::rclcpp
   ${base_interfaces_demo_TARGETS}
 )
+target_link_libraries(demo02_client PUBLIC
+  rclcpp::rclcpp
+  ${base_interfaces_demo_TARGETS}
+)
 
 target_compile_features(demo01_server PUBLIC cxx_std_17)
+target_compile_features(demo02_client PUBLIC cxx_std_17)
 
 install(TARGETS
-  demo01_server
+  demo01_server demo02_client
   DESTINATION lib/${PROJECT_NAME}
 )
 
