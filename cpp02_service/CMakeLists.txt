@@ -10,6 +10,20 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(base_interfaces_demo REQUIRED)
 
+add_executable(demo01_server src/demo01_server.cpp)
+
+target_link_libraries(demo01_server PUBLIC
+  rclcpp::rclcpp
+  ${base_interfaces_demo_TARGETS}
+)
+
+target_compile_features(demo01_server PUBLIC cxx_std_17)
+
+install(TARGETS
+  demo01_server
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
