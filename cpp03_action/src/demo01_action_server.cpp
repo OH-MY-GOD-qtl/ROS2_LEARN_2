@@ -13,15 +13,15 @@ public:
     : Node("minimal_action_server", options)
     {
         this->action_server_ = rclcpp_action::create_server<Progress>(
-            this, "get_sum", std::bind(&MinimalActionServer::handel_goal, this, _1, _2),
-            std::bind(&MinimalActionServer::hanedl_cancel, this, _1),
-            std::bind(&MinimalActionServer::handel_accepted, this, _1));
+            this, "get_sum", std::bind(&MinimalActionServer::handle_goal, this, _1, _2),
+            std::bind(&MinimalActionServer::handle_cancel, this, _1),
+            std::bind(&MinimalActionServer::handle_accepted, this, _1));
         RCLCPP_INFO(this->get_logger(), "Action server 'get_sum' is ready.");
     }
 
 private:
     rclcpp_action::Server<Progress>::SharedPtr action_server_;
-    rclcpp_action::GoalResponse handel_goal(
+    rclcpp_action::GoalResponse handle_goal(
         const rclcpp_action::GoalUUID & uuid, std::shared_ptr<const Progress::Goal> goal)
     {
         (void)uuid;
@@ -32,7 +32,7 @@ private:
         return rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE;
     }
 
-    rclcpp_action::CancelResponse hanedl_cancel(
+    rclcpp_action::CancelResponse handle_cancel(
         const std::shared_ptr<GoalHandleProgress> goal_handle)
     {
         (void)goal_handle;
@@ -48,5 +48,36 @@ private:
         auto feedback = std::make_shared<Progress::Feedback>();
         auto result = std::make_shared<Progress::Result>();
         int64_t sum = 0;
+        for (int i = 1; (i <= goal->num) && rclcpp::ok(); i++) {
+            sum += i;
+            if (goal_handle->is_canceling()) {
+                result->sum = sum;
+                goal_handle->canceled(result);
+                RCLCPP_INFO(this->get_logger(), "Goal canceled");
+                return;
+            }
+            feedback->progress = (double_t)i / goal->num;
+            goal_handle->publish_feedback(feedback);
+            RCLCPP_INFO(this->get_logger(), "Publishing feedback: %.2f", feedback->progress);
+            loop_rate.sleep();
+        }
+        if (rclcpp::ok()) {
+            result->sum = sum;
+            goal_handle->succeed(result);
+            RCLCPP_INFO(this->get_logger(), "Goal succeeded");  
+        }
+    }
+    void handle_accepted(const std::shared_ptr<GoalHandleProgress> goal_handle)
+    {
+        std::thread{std::bind(&MinimalActionServer::execute, this, _1), goal_handle}.detach();
     }
 };
+
+int main(int argc, char ** argv)
+{
+    rclcpp::init(argc, argv);
+    auto action_server = std::make_shared<MinimalActionServer>();
+    rclcpp::spin(action_server);
+    rclcpp::shutdown();
+    return 0;
+}
