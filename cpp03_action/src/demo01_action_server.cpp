@@ -39,4 +39,14 @@ private:
         RCLCPP_INFO(this->get_logger(), "Received request to cancel goal");
         return rclcpp_action::CancelResponse::ACCEPT;
     }
+    
+    void execute(const std::shared_ptr<GoalHandleProgress> goal_handle)
+    {
+        RCLCPP_INFO(this->get_logger(), "Executing goal");
+        rclcpp::Rate loop_rate(10.0);
+        const auto goal = goal_handle->get_goal();
+        auto feedback = std::make_shared<Progress::Feedback>();
+        auto result = std::make_shared<Progress::Result>();
+        int64_t sum = 0;
+    }
 };
