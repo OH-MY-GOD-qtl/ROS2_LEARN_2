@@ -28,6 +28,12 @@ target_link_libraries(demo02_action_client PUBLIC
 target_compile_features(demo01_action_server PUBLIC cxx_std_17)
 target_compile_features(demo02_action_client PUBLIC cxx_std_17)
 
+install(TARGETS
+  demo01_action_server
+  demo02_action_client
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
